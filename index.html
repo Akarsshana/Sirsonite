@@ -1,56 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>AR Sample</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <title>AR Sample</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="demo-styles.css">
-    
-    <!-- The following libraries and polyfills are recommended to maximize browser support -->
-    <!-- NOTE: you must adjust the paths as appropriate for your project -->
-    
-    <!-- 💁 OPTIONAL: The :focus-visible polyfill removes the focus ring for some input types -->
-    <script src="https://unpkg.com/focus-visible@5.0.2/dist/focus-visible.js" defer></script>
-	<h1>AR Samples </h1>
-  </head> 
+  <link rel="stylesheet" href="demo-styles.css">
+
+  <!-- Focus visible polyfill -->
+  <script src="https://unpkg.com/focus-visible@5.0.2/dist/focus-visible.js" defer></script>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; }
+    .thumbs { margin-top: 20px; }
+    .thumbs img {
+      width: 100px;
+      margin: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 8px;
+    }
+    .thumbs img:hover {
+      border: 2px solid #007bff;
+    }
+    model-viewer {
+      width: 100%;
+      height: 70vh;
+    }
+  </style>
+</head> 
 <body>
-  
-    
-  
-  
-  
-    
-    
-    <model-viewer src="models/bruno.glb"
-                  ios-src="assets/houseplan.usdz"
-                  poster=""
-                  alt="A 3D space of an office"
-                  shadow-intensity="1"
-                  camera-controls
-                  auto-rotate ar>
-    </model-viewer>
-    
-  
-  
- 
-  
-  
-  <!-- 💁 Include both scripts below to support all browsers! -->
+  <h1>AR Samples</h1>
 
-  <!-- Loads <model-viewer> for modern browsers: -->
-  <script type="module"
-      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
-  </script>
+  <!-- Main model-viewer -->
+  <model-viewer id="viewer"
+                src=""
+                alt="3D model viewer"
+                shadow-intensity="1"
+                camera-controls
+                auto-rotate 
+                ar>
+  </model-viewer>
+
+  <!-- Thumbnails to switch models -->
+  <div class="thumbs">
+    <img src="assets/thumb1.png" alt="Model 1" onclick="changeModel('models/bruno.glb')">
+    <img src="assets/thumb2.png" alt="Model 2" onclick="changeModel('models/candle_in_a_glass.glb')">
+    <img src="assets/thumb3.png" alt="Model 3" onclick="changeModel('models/decorative_furniture.glb')">
+  </div>
+
+  <!-- Loads <model-viewer> -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-    // Wait for the DOM to be fully loaded
-    setTimeout(function() {
-        document.querySelector(".loading-screen").style.display = "none";
-        document.querySelector(".main-content").style.display = "block";
-    }, 2000); // 2000 milliseconds = 2 seconds
-});
+    function changeModel(modelPath) {
+      document.getElementById('viewer').setAttribute('src', modelPath);
+    }
   </script>
 </body>
 </html>
