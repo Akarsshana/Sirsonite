@@ -1,18 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>AR Sample</title>
+  <title>AR Hologram Viewer</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="demo-styles.css">
+  <!-- Load model-viewer -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
-  <!-- Focus visible polyfill -->
-  <script src="https://unpkg.com/focus-visible@5.0.2/dist/focus-visible.js" defer></script>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; }
-    .thumbs { margin-top: 20px; }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: black;
+      color: white;
+    }
+    h1 { margin: 20px 0; }
+
+    model-viewer {
+      width: 100%;
+      height: 70vh;
+      background-color: black;
+      transition: filter 0.3s ease; /* smooth effect */
+    }
+
+    .thumbs {
+      margin-top: 20px;
+    }
     .thumbs img {
       width: 100px;
       margin: 10px;
@@ -21,44 +36,56 @@
       border-radius: 8px;
     }
     .thumbs img:hover {
-      border: 2px solid #007bff;
-    }
-    model-viewer {
-      width: 100%;
-      height: 70vh;
+      border: 2px solid cyan;
     }
   </style>
 </head> 
 <body>
-  <h1>AR Samples</h1>
+  <h1>AR Hologram Samples</h1>
 
   <!-- Main model-viewer -->
   <model-viewer id="viewer"
-                src=""
-                alt="3D model viewer"
-                shadow-intensity="1"
+                src="models/final.glb"
+                alt="Hologram model"
+                shadow-intensity="0"
                 camera-controls
-                auto-rotate 
-                ar>
+                auto-rotate
+                exposure="1.4"
+                ar
+                environment-image="neutral"
+                style="--poster-color: transparent; --progress-mask: transparent;">
   </model-viewer>
 
   <!-- Thumbnails to switch models -->
   <div class="thumbs">
     <img src="assets/thumb1.png" alt="Model 1" onclick="changeModel('models/bruno.glb')">
-    <img src="assets/thumb3.png" alt="Model 1 holo" onclick="changeModel('models/bruno_holo.glb')">
-    <img src="assets/thumb3.png" alt="Model 1 holo" onclick="changeModel('models/hologram.glb')">
+    <img src="assets/thumb3.png" alt="Model 1 Holo" onclick="changeModel('models/final.glb')">
+    <img src="assets/thumb3.png" alt="Hologram" onclick="changeModel('models/hologram.glb')">
     <img src="assets/thumb2.png" alt="Model 2" onclick="changeModel('models/candle_in_a_glass.glb')">
     <img src="assets/thumb3.png" alt="Model 3" onclick="changeModel('models/decorative_furniture.glb')">
-
+    <img src="assets/thumb3.png" alt="Skull Holo" onclick="changeModel('models/skull.glb')">
   </div>
 
-  <!-- Loads <model-viewer> -->
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-
+  <!-- Script to switch models and apply glow only to final.glb -->
   <script>
     function changeModel(modelPath) {
-      document.getElementById('viewer').setAttribute('src', modelPath);
+      const viewer = document.getElementById('viewer');
+      viewer.setAttribute('src', modelPath);
+
+      // Apply glow only if it's the hologram model
+      if (modelPath.includes("final.glb")) {
+        viewer.style.filter = "drop-shadow(0 0 20px cyan) drop-shadow(0 0 40px cyan)";
+        viewer.setAttribute("exposure", "1.4");
+        viewer.setAttribute("shadow-intensity", "0");
+      } else {
+        viewer.style.filter = "none";
+        viewer.setAttribute("exposure", "1"); // normal lighting
+        viewer.setAttribute("shadow-intensity", "1");
+      }
     }
+
+    // Apply glow for default loaded model
+    changeModel("models/final.glb");
   </script>
 </body>
 </html>
